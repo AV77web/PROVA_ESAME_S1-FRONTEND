@@ -7,91 +7,127 @@
 
 
 .permessi-container {
-    padding: 20px;
-    max-width: 1200px;
+    padding: 30px;
+    max-width: 1400px;
     margin: 0 auto;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: calc(100vh - 200px);
+    border-radius: 20px;
 }
 
 .permessi-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
+    background: white;
+    padding: 25px 35px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .permessi-header h1 {
     margin: 0;
-    color: #333;
+    color: #2d3748;
+    font-size: 32px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .btn-primary {
-    background-color: #007bff;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
+    padding: 12px 28px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+    letter-spacing: 0.5px;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:active {
+    transform: translateY(0);
 }
 
 .btn-secondary {
-    background-color: #6c757d;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
+    background-color: #e2e8f0;
+    color: #4a5568;
+    border: 2px solid #cbd5e0;
+    padding: 10px 20px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
+    font-weight: 600;
     margin-right: 10px;
+    transition: all 0.3s ease;
 }
 
 .btn-secondary:hover {
-    background-color: #5a6268;
+    background-color: #cbd5e0;
+    border-color: #a0aec0;
+    transform: translateY(-1px);
 }
 
 .btn-success {
-    background-color: #28a745;
+    background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
+    padding: 10px 18px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
+    font-weight: 600;
     margin-right: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 12px rgba(72, 187, 120, 0.3);
 }
 
 .btn-success:hover {
-    background-color: #218838;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 18px rgba(72, 187, 120, 0.4);
 }
 
 .btn-danger {
-    background-color: #dc3545;
+    background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
     color: white;
     border: none;
-    padding: 8px 16px;
-    border-radius: 5px;
+    padding: 10px 18px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 14px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 12px rgba(245, 101, 101, 0.3);
 }
 
 .btn-danger:hover {
-    background-color: #c82333;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 18px rgba(245, 101, 101, 0.4);
 }
 
 .filters-container {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
+    background: white;
+    padding: 25px 30px;
+    border-radius: 16px;
+    margin-bottom: 25px;
     display: flex;
-    gap: 15px;
+    gap: 20px;
     flex-wrap: wrap;
     align-items: center;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .filter-group {
@@ -101,16 +137,33 @@
 }
 
 .filter-group label {
-    font-size: 14px;
-    font-weight: 500;
-    color: #495057;
+    font-size: 13px;
+    font-weight: 600;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .filter-group select {
-    padding: 8px 12px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
+    padding: 10px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
     font-size: 14px;
+    background-color: #f7fafc;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    min-width: 180px;
+}
+
+.filter-group select:hover {
+    border-color: #cbd5e0;
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: #667eea;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .permessi-table {
@@ -134,14 +187,21 @@
 }
 
 .permessi-table th {
-    font-weight: 600;
-    color: #495057;
-    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    font-size: 13px;
     text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+a.permessi-table tbody tr {
+    transition: all 0.3s ease;
 }
 
 .permessi-table tbody tr:hover {
-    background-color: #f8f9fa;
+    background-color: #f7fafc;
+    transform: scale(1.01);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .permessi-table tbody tr:last-child td {
@@ -150,26 +210,28 @@
 
 .stato-badge {
     display: inline-block;
-    padding: 4px 12px;
-    border-radius: 12px;
-    font-size: 12px;
-    font-weight: 600;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
     text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .stato-in-attesa {
-    background-color: #fff3cd;
-    color: #856404;
+    background: linear-gradient(135deg, #ffd93d 0%, #feca57 100%);
+    color: #7d5a00;
 }
 
 .stato-approvato {
-    background-color: #d4edda;
-    color: #155724;
+    background: linear-gradient(135deg, #6dd5ed 0%, #2193b0 100%);
+    color: white;
 }
 
 .stato-rifiutato {
-    background-color: #f8d7da;
-    color: #721c24;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+    color: white;
 }
 
 .actions-cell {
@@ -179,20 +241,45 @@
 
 .empty-state {
     text-align: center;
-    padding: 60px 20px;
-    color: #6c757d;
+    padding: 80px 40px;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
 .empty-state-icon {
-    font-size: 48px;
-    margin-bottom: 20px;
+    font-size: 72px;
+    margin-bottom: 24px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    color: #2d3748;
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.empty-state p {
+    color: #718096;
+    font-size: 16px;
 }
 
 .loading-state {
     text-align: center;
-    padding: 40px;
-    font-size: 18px;
-    color: #6c757d;
+    padding: 60px;
+    font-size: 20px;
+    color: #667eea;
+    font-weight: 600;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
 }
 
 .error-message {
@@ -211,21 +298,47 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 .modal-content {
     background: white;
-    padding: 30px;
-    border-radius: 8px;
-    max-width: 500px;
+    padding: 35px 40px;
+    border-radius: 20px;
+    max-width: 550px;
     width: 90%;
     max-height: 90vh;
     overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
 .modal-header {
@@ -237,7 +350,13 @@
 
 .modal-header h2 {
     margin: 0;
-    color: #333;
+    color: #2d3748;
+    font-size: 26px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .modal-close {
@@ -267,11 +386,22 @@
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ced4da;
-    border-radius: 5px;
+    padding: 12px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
     font-size: 14px;
     box-sizing: border-box;
+    transition: all 0.3s ease;
+    background-color: #f7fafc;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #667eea;
+    background-color: white;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .form-group textarea {
