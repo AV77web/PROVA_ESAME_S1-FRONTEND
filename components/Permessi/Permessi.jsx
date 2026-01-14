@@ -136,22 +136,80 @@ const Permessi = () => {
         }
     };
 
+    // Calcola statistiche
+    const stats = {
+        totali: permessi.length,
+        inAttesa: permessi.filter(p => p.Stato === 'In attesa').length,
+        approvati: permessi.filter(p => p.Stato === 'Approvato').length,
+        rifiutati: permessi.filter(p => p.Stato === 'Rifiutato').length
+    };
+
     if (loading) {
-        return <div className="loading-state">Caricamento in corso...</div>;
+        return (
+            <div className="permessi-container">
+                <div className="loading-state">
+                    <div className="spinner"></div>
+                    <p>Caricamento in corso...</p>
+                </div>
+            </div>
+        );
     }
 
     return (
         <div className="permessi-container">
             <div className="permessi-header">
-                <h1>Gestione Permessi</h1>
+                <div className="header-content">
+                    <div className="header-title">
+                        <span className="icon-title">📋</span>
+                        <h1>Gestione Permessi</h1>
+                    </div>
+                    <p className="header-subtitle">
+                        {user?.ruolo === 'Dipendente'
+                            ? 'Gestisci le tue richieste di permesso'
+                            : 'Gestisci tutte le richieste del team'}
+                    </p>
+                </div>
                 {user?.ruolo === 'Dipendente' && (
                     <button
                         className="btn-primary"
                         onClick={() => setShowModal(true)}
                     >
-                        + Nuova Richiesta
+                        <span className="btn-icon">+</span>
+                        Nuova Richiesta
                     </button>
                 )}
+            </div>
+
+            {/* Statistiche */}
+            <div className="stats-container">
+                <div className="stat-card stat-total">
+                    <div className="stat-icon">📊</div>
+                    <div className="stat-content">
+                        <div className="stat-value">{stats.totali}</div>
+                        <div className="stat-label">Totali</div>
+                    </div>
+                </div>
+                <div className="stat-card stat-pending">
+                    <div className="stat-icon">⏳</div>
+                    <div className="stat-content">
+                        <div className="stat-value">{stats.inAttesa}</div>
+                        <div className="stat-label">In Attesa</div>
+                    </div>
+                </div>
+                <div className="stat-card stat-approved">
+                    <div className="stat-icon">✅</div>
+                    <div className="stat-content">
+                        <div className="stat-value">{stats.approvati}</div>
+                        <div className="stat-label">Approvati</div>
+                    </div>
+                </div>
+                <div className="stat-card stat-rejected">
+                    <div className="stat-icon">❌</div>
+                    <div className="stat-content">
+                        <div className="stat-value">{stats.rifiutati}</div>
+                        <div className="stat-label">Rifiutati</div>
+                    </div>
+                </div>
             </div>
 
             {error && (
@@ -162,32 +220,53 @@ const Permessi = () => {
 
             {/* Filtri */}
             <div className="filters-container">
-                <div className="filter-group">
-                    <label>Stato:</label>
-                    <select
-                        value={filtro.stato}
-                        onChange={(e) => setFiltro({ ...filtro, stato: e.target.value })}
-                    >
-                        <option value="">Tutti</option>
-                        <option value="In attesa">In attesa</option>
-                        <option value="Approvato">Approvato</option>
-                        <option value="Rifiutato">Rifiutato</option>
-                    </select>
+                <div className="filters-header">
+                    <span className="filters-icon">🔍</span>
+                    <h3>Filtra Richieste</h3>
                 </div>
+                <div className="filters-content">
+                    <div className="filter-group">
+                        <label>
+                            <span className="label-icon">📌</span>
+                            Stato
+                        </label>
+                        <select
+                            value={filtro.stato}
+                            onChange={(e) => setFiltro({ ...filtro, stato: e.target.value })}
+                        >
+                            <option value="">🔘 Tutti gli stati</option>
+                            <option value="In attesa">⏳ In attesa</option>
+                            <option value="Approvato">✅ Approvato</option>
+                            <option value="Rifiutato">❌ Rifiutato</option>
+                        </select>
+                    </div>
 
-                <div className="filter-group">
-                    <label>Categoria:</label>
-                    <select
-                        value={filtro.categoria}
-                        onChange={(e) => setFiltro({ ...filtro, categoria: e.target.value })}
-                    >
-                        <option value="">Tutte</option>
-                        {categorie.map(cat => (
-                            <option key={cat.CategoriaID} value={cat.CategoriaID}>
-                                {cat.Descrizione}
-                            </option>
-                        ))}
-                    </select>
+                    <div className="filter-group">
+                        <label>
+                            <span className="label-icon">📂</span>
+                            Categoria
+                        </label>
+                        <select
+                            value={filtro.categoria}
+                            onChange={(e) => setFiltro({ ...filtro, categoria: e.target.value })}
+                        >
+                            <option value="">📁 Tutte le categorie</option>
+                            {categorie.map(cat => (
+                                <option key={cat.CategoriaID} value={cat.CategoriaID}>
+                                    {cat.Descrizione}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    {(filtro.stato || filtro.categoria) && (
+                        <button
+                            className="btn-clear-filters"
+                            onClick={() => setFiltro({ stato: '', categoria: '' })}
+                        >
+                            ✖ Rimuovi Filtri
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -197,83 +276,108 @@ const Permessi = () => {
                     <div className="empty-state-icon">📋</div>
                     <h3>Nessuna richiesta trovata</h3>
                     <p>Non ci sono richieste di permesso da visualizzare</p>
+                    {user?.ruolo === 'Dipendente' && (
+                        <button
+                            className="btn-primary"
+                            onClick={() => setShowModal(true)}
+                            style={{ marginTop: '20px' }}
+                        >
+                            <span className="btn-icon">+</span>
+                            Crea la tua prima richiesta
+                        </button>
+                    )}
                 </div>
             ) : (
-                <table className="permessi-table">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            {user?.ruolo === 'Responsabile' && <th>Richiedente</th>}
-                            <th>Categoria</th>
-                            <th>Data Inizio</th>
-                            <th>Data Fine</th>
-                            <th>Stato</th>
-                            <th>Data Richiesta</th>
-                            {user?.ruolo === 'Responsabile' && <th>Valutatore</th>}
-                            <th>Azioni</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {permessi.map(permesso => (
-                            <tr key={permesso.RichiestaID}>
-                                <td>{permesso.RichiestaID}</td>
-                                {user?.ruolo === 'Responsabile' && (
+                <div className="table-wrapper">
+                    <div className="table-header">
+                        <h3>
+                            <span className="table-icon">📋</span>
+                            Elenco Richieste ({permessi.length})
+                        </h3>
+                    </div>
+                    <table className="permessi-table">
+                        <thead>
+                            <tr>
+                                <th>🆔 ID</th>
+                                {user?.ruolo === 'Responsabile' && <th>👤 Richiedente</th>}
+                                <th>📂 Categoria</th>
+                                <th>📅 Data Inizio</th>
+                                <th>📅 Data Fine</th>
+                                <th>📊 Stato</th>
+                                <th>🕐 Data Richiesta</th>
+                                {user?.ruolo === 'Responsabile' && <th>👨‍💼 Valutatore</th>}
+                                <th>⚙️ Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {permessi.map(permesso => (
+                                <tr key={permesso.RichiestaID}>
+                                    <td>{permesso.RichiestaID}</td>
+                                    {user?.ruolo === 'Responsabile' && (
+                                        <td>
+                                            {permesso.RichiedenteNome} {permesso.RichiedenteCognome}
+                                        </td>
+                                    )}
+                                    <td>{permesso.CategoriaDescrizione}</td>
+                                    <td>{formatDate(permesso.DataInizio)}</td>
+                                    <td>{formatDate(permesso.DataFine)}</td>
                                     <td>
-                                        {permesso.RichiedenteNome} {permesso.RichiedenteCognome}
+                                        <span className={`stato-badge ${getStatoBadgeClass(permesso.Stato)}`}>
+                                            {permesso.Stato}
+                                        </span>
                                     </td>
-                                )}
-                                <td>{permesso.CategoriaDescrizione}</td>
-                                <td>{formatDate(permesso.DataInizio)}</td>
-                                <td>{formatDate(permesso.DataFine)}</td>
-                                <td>
-                                    <span className={`stato-badge ${getStatoBadgeClass(permesso.Stato)}`}>
-                                        {permesso.Stato}
-                                    </span>
-                                </td>
-                                <td>{formatDate(permesso.DataRichiesta)}</td>
-                                {user?.ruolo === 'Responsabile' && (
+                                    <td>{formatDate(permesso.DataRichiesta)}</td>
+                                    {user?.ruolo === 'Responsabile' && (
+                                        <td>
+                                            {permesso.ValutatoreNome ?
+                                                `${permesso.ValutatoreNome} ${permesso.ValutatoreCognome}` :
+                                                '-'
+                                            }
+                                        </td>
+                                    )}
                                     <td>
-                                        {permesso.ValutatoreNome ?
-                                            `${permesso.ValutatoreNome} ${permesso.ValutatoreCognome}` :
-                                            '-'
-                                        }
-                                    </td>
-                                )}
-                                <td>
-                                    <div className="actions-cell">
-                                        {/* Azioni per Responsabile */}
-                                        {user?.ruolo === 'Responsabile' && permesso.Stato === 'In attesa' && (
-                                            <>
-                                                <button
-                                                    className="btn-success"
-                                                    onClick={() => handleValuta(permesso.RichiestaID, 'Approvato')}
-                                                >
-                                                    ✓ Approva
-                                                </button>
+                                        <div className="actions-cell">
+                                            {/* Azioni per Responsabile */}
+                                            {user?.ruolo === 'Responsabile' && permesso.Stato === 'In attesa' ? (
+                                                <>
+                                                    <button
+                                                        className="btn-success"
+                                                        onClick={() => handleValuta(permesso.RichiestaID, 'Approvato')}
+                                                        title="Approva richiesta"
+                                                    >
+                                                        ✓ Approva
+                                                    </button>
+                                                    <button
+                                                        className="btn-danger"
+                                                        onClick={() => handleValuta(permesso.RichiestaID, 'Rifiutato')}
+                                                        title="Rifiuta richiesta"
+                                                    >
+                                                        ✗ Rifiuta
+                                                    </button>
+                                                </>
+                                            ) : user?.ruolo === 'Responsabile' ? (
+                                                <span className="no-action">Già valutata</span>
+                                            ) : null}
+
+                                            {/* Azioni per Dipendente */}
+                                            {user?.ruolo === 'Dipendente' && permesso.Stato === 'In attesa' ? (
                                                 <button
                                                     className="btn-danger"
-                                                    onClick={() => handleValuta(permesso.RichiestaID, 'Rifiutato')}
+                                                    onClick={() => handleDelete(permesso.RichiestaID)}
+                                                    title="Elimina richiesta"
                                                 >
-                                                    ✗ Rifiuta
+                                                    🗑️ Elimina
                                                 </button>
-                                            </>
-                                        )}
-
-                                        {/* Azioni per Dipendente */}
-                                        {user?.ruolo === 'Dipendente' && permesso.Stato === 'In attesa' && (
-                                            <button
-                                                className="btn-danger"
-                                                onClick={() => handleDelete(permesso.RichiestaID)}
-                                            >
-                                                Elimina
-                                            </button>
-                                        )}
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                            ) : user?.ruolo === 'Dipendente' ? (
+                                                <span className="no-action">Non modificabile</span>
+                                            ) : null}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             )}
 
             {/* Modal per nuova richiesta */}
@@ -281,24 +385,31 @@ const Permessi = () => {
                 <div className="modal-overlay" onClick={() => setShowModal(false)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header">
-                            <h2>Nuova Richiesta di Permesso</h2>
+                            <h2>
+                                <span className="modal-icon">📝</span>
+                                Nuova Richiesta di Permesso
+                            </h2>
                             <button
                                 className="modal-close"
                                 onClick={() => setShowModal(false)}
+                                title="Chiudi"
                             >
                                 ×
                             </button>
                         </div>
 
-                        <form onSubmit={handleCreatePermesso}>
+                        <form onSubmit={handleCreatePermesso} className="permesso-form">
                             <div className="form-group">
-                                <label>Categoria *</label>
+                                <label>
+                                    <span className="form-icon">📂</span>
+                                    Categoria *
+                                </label>
                                 <select
                                     value={formData.categoriaId}
                                     onChange={(e) => setFormData({ ...formData, categoriaId: e.target.value })}
                                     required
                                 >
-                                    <option value="">Seleziona una categoria</option>
+                                    <option value="">📁 Seleziona una categoria</option>
                                     {categorie.map(cat => (
                                         <option key={cat.CategoriaID} value={cat.CategoriaID}>
                                             {cat.Descrizione}
@@ -307,33 +418,48 @@ const Permessi = () => {
                                 </select>
                             </div>
 
-                            <div className="form-group">
-                                <label>Data Inizio *</label>
-                                <input
-                                    type="date"
-                                    value={formData.dataInizio}
-                                    onChange={(e) => setFormData({ ...formData, dataInizio: e.target.value })}
-                                    required
-                                />
+                            <div className="form-row">
+                                <div className="form-group">
+                                    <label>
+                                        <span className="form-icon">📅</span>
+                                        Data Inizio *
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={formData.dataInizio}
+                                        onChange={(e) => setFormData({ ...formData, dataInizio: e.target.value })}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label>
+                                        <span className="form-icon">📅</span>
+                                        Data Fine *
+                                    </label>
+                                    <input
+                                        type="date"
+                                        value={formData.dataFine}
+                                        onChange={(e) => setFormData({ ...formData, dataFine: e.target.value })}
+                                        required
+                                    />
+                                </div>
                             </div>
 
                             <div className="form-group">
-                                <label>Data Fine *</label>
-                                <input
-                                    type="date"
-                                    value={formData.dataFine}
-                                    onChange={(e) => setFormData({ ...formData, dataFine: e.target.value })}
-                                    required
-                                />
-                            </div>
-
-                            <div className="form-group">
-                                <label>Motivazione</label>
+                                <label>
+                                    <span className="form-icon">📝</span>
+                                    Motivazione
+                                </label>
                                 <textarea
                                     value={formData.motivazione}
                                     onChange={(e) => setFormData({ ...formData, motivazione: e.target.value })}
-                                    placeholder="Inserisci una motivazione (opzionale)"
+                                    placeholder="Inserisci la motivazione della richiesta (opzionale)..."
+                                    rows="4"
                                 />
+                                <small className="form-hint">
+                                    💡 Una motivazione chiara aiuta ad approvare più velocemente la richiesta
+                                </small>
                             </div>
 
                             <div className="form-actions">
@@ -342,13 +468,13 @@ const Permessi = () => {
                                     className="btn-secondary"
                                     onClick={() => setShowModal(false)}
                                 >
-                                    Annulla
+                                    ✖ Annulla
                                 </button>
                                 <button
                                     type="submit"
                                     className="btn-primary"
                                 >
-                                    Crea Richiesta
+                                    ✓ Crea Richiesta
                                 </button>
                             </div>
                         </form>
