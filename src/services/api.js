@@ -117,3 +117,122 @@ export const logoutUser = async () => {
         return { message: 'Logout effettuato lato client' };
     }
 };
+
+// =================================================
+// API PER LA GESTIONE DEI PERMESSI
+// =================================================
+
+/**
+ * Ottieni tutte le categorie di permesso
+ * @returns {Promise<Object>} - Lista delle categorie
+ */
+export const getCategorie = async () => {
+    const response = await fetch(`${API_BASE_URL}/categorie`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Ottieni tutte le richieste di permesso (con filtri opzionali)
+ * @param {Object} filters - Filtri per le richieste
+ * @param {number} [filters.utenteId] - ID utente
+ * @param {string} [filters.stato] - Stato della richiesta
+ * @param {number} [filters.categoriaId] - ID categoria
+ * @returns {Promise<Object>} - Lista delle richieste
+ */
+export const getPermessi = async (filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.utenteId) params.append('utenteId', filters.utenteId);
+    if (filters.stato) params.append('stato', filters.stato);
+    if (filters.categoriaId) params.append('categoriaId', filters.categoriaId);
+
+    const queryString = params.toString();
+    const url = queryString ? `${API_BASE_URL}/permessi?${queryString}` : `${API_BASE_URL}/permessi`;
+
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Ottieni una singola richiesta di permesso
+ * @param {number} id - ID della richiesta
+ * @returns {Promise<Object>} - Dettagli della richiesta
+ */
+export const getPermesso = async (id) => {
+    const response = await fetch(`${API_BASE_URL}/permessi/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Crea una nuova richiesta di permesso
+ * @param {Object} permesso - Dati della richiesta
+ * @param {string} permesso.dataInizio - Data di inizio
+ * @param {string} permesso.dataFine - Data di fine
+ * @param {number} permesso.categoriaId - ID categoria
+ * @param {string} [permesso.motivazione] - Motivazione
+ * @param {number} permesso.utenteId - ID utente richiedente
+ * @returns {Promise<Object>} - Richiesta creata
+ */
+export const createPermesso = async (permesso) => {
+    const response = await fetch(`${API_BASE_URL}/permessi`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(permesso),
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Valuta una richiesta di permesso (approva o rifiuta)
+ * @param {number} id - ID della richiesta
+ * @param {string} stato - 'Approvato' o 'Rifiutato'
+ * @param {number} utenteValutazioneId - ID del responsabile che valuta
+ * @returns {Promise<Object>} - Richiesta aggiornata
+ */
+export const valutaPermesso = async (id, stato, utenteValutazioneId) => {
+    const response = await fetch(`${API_BASE_URL}/permessi/${id}/valuta`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ stato, utenteValutazioneId }),
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Elimina una richiesta di permesso (solo se in attesa)
+ * @param {number} id - ID della richiesta
+ * @returns {Promise<Object>} - Messaggio di conferma
+ */
+export const deletePermesso = async (id) => {
+    const response = await fetch(`${API_BASE_URL}/permessi/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+    return handleResponse(response);
+};
