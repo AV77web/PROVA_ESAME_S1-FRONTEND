@@ -6,7 +6,7 @@
 // =================================================
 
 const API_BASE_URL = import.meta.env.PROD
-    ? "https://your-production-backend.com"
+    ? "https://prova-esame-s1-backend.onrender.com"
     : "http://localhost:3000";
 
 /**
