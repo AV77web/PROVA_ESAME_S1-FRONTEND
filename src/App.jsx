@@ -39,13 +39,13 @@ const Dashboard = () => {
           className={`nav-item ${currentPage === 'home' ? 'active' : ''}`}
           onClick={() => setCurrentPage('home')}
         >
-          🏠 Home
+          Home
         </button>
         <button
           className={`nav-item ${currentPage === 'permessi' ? 'active' : ''}`}
           onClick={() => setCurrentPage('permessi')}
         >
-          📋 Permessi
+          Permessi
         </button>
       </nav>
 
