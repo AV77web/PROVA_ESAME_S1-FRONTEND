@@ -203,6 +203,28 @@ export const createPermesso = async (permesso) => {
 };
 
 /**
+ * Modifica una richiesta di permesso (solo se propria e in attesa)
+ * @param {number} id - ID della richiesta
+ * @param {Object} permesso - Dati aggiornati
+ * @param {string} permesso.dataInizio - Data di inizio
+ * @param {string} permesso.dataFine - Data di fine
+ * @param {number} permesso.categoriaId - ID categoria
+ * @param {string} [permesso.motivazione] - Motivazione
+ * @returns {Promise<Object>} - Richiesta aggiornata
+ */
+export const updatePermesso = async (id, permesso) => {
+    const response = await fetch(`${API_BASE_URL}/permessi/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(permesso),
+    });
+    return handleResponse(response);
+};
+
+/**
  * Valuta una richiesta di permesso (approva o rifiuta)
  * @param {number} id - ID della richiesta
  * @param {string} stato - 'Approvato' o 'Rifiutato'
