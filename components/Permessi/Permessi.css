@@ -1,3 +1,11 @@
+/*=================================
+* File: Permessi.css
+* Stili per il componente Permessi.jsx
+* @author: "andrea.villari@allievi.itsdigitalacademy.com"
+* @version: 1.0.0 2026-01-14
+*=================================
+
+
 .permessi-container {
     padding: 20px;
     max-width: 1200px;
@@ -109,7 +117,7 @@
     width: 100%;
     border-collapse: collapse;
     background: white;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     overflow: hidden;
 }

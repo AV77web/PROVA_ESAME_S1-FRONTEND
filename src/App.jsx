@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from '../components/Login/Login';
 import Registration from '../components/Registration/Registration';
+import Permessi from '../components/Permessi/Permessi';
 import './App.css';
 
 /**
@@ -16,37 +17,76 @@ import './App.css';
  */
 const Dashboard = () => {
   const { user, logout } = useAuth();
+  const [currentPage, setCurrentPage] = useState('home'); // 'home' o 'permessi'
 
   return (
     <div className="dashboard">
       <div className="dashboard-header">
-        <h1>Benvenuto, {user?.nome} {user?.cognome}!</h1>
-        <button onClick={logout} className="btn-logout">
-          Logout
-        </button>
-      </div>
-      <div className="dashboard-content">
-        <div className="user-info-card">
-          <h2>Informazioni Utente</h2>
-          <div className="info-row">
-            <span className="info-label">Nome:</span>
-            <span className="info-value">{user?.nome}</span>
-          </div>
-          <div className="info-row">
-            <span className="info-label">Cognome:</span>
-            <span className="info-value">{user?.cognome}</span>
-          </div>
-          <div className="info-row">
-            <span className="info-label">Email:</span>
-            <span className="info-value">{user?.email}</span>
-          </div>
-          <div className="info-row">
-            <span className="info-label">Ruolo:</span>
-            <span className={`badge badge-${user?.ruolo?.toLowerCase()}`}>
-              {user?.ruolo}
-            </span>
-          </div>
+        <div className="header-left">
+          <h1>Sistema Gestione Permessi</h1>
         </div>
+        <div className="header-right">
+          <span className="user-name">👤 {user?.nome} {user?.cognome}</span>
+          <button onClick={logout} className="btn-logout">
+            Logout
+          </button>
+        </div>
+      </div>
+
+      {/* Menu di navigazione */}
+      <nav className="dashboard-nav">
+        <button
+          className={`nav-item ${currentPage === 'home' ? 'active' : ''}`}
+          onClick={() => setCurrentPage('home')}
+        >
+          🏠 Home
+        </button>
+        <button
+          className={`nav-item ${currentPage === 'permessi' ? 'active' : ''}`}
+          onClick={() => setCurrentPage('permessi')}
+        >
+          📋 Permessi
+        </button>
+      </nav>
+
+      {/* Contenuto della pagina */}
+      <div className="dashboard-content">
+        {currentPage === 'home' ? (
+          <div className="user-info-card">
+            <h2>Informazioni Utente</h2>
+            <div className="info-row">
+              <span className="info-label">Nome:</span>
+              <span className="info-value">{user?.nome}</span>
+            </div>
+            <div className="info-row">
+              <span className="info-label">Cognome:</span>
+              <span className="info-value">{user?.cognome}</span>
+            </div>
+            <div className="info-row">
+              <span className="info-label">Email:</span>
+              <span className="info-value">{user?.email}</span>
+            </div>
+            <div className="info-row">
+              <span className="info-label">Ruolo:</span>
+              <span className={`badge badge-${user?.ruolo?.toLowerCase()}`}>
+                {user?.ruolo}
+              </span>
+            </div>
+
+            {/* Quick action */}
+            <div className="quick-actions">
+              <h3>Azioni Rapide</h3>
+              <button
+                className="btn-action"
+                onClick={() => setCurrentPage('permessi')}
+              >
+                Vai a Gestione Permessi →
+              </button>
+            </div>
+          </div>
+        ) : (
+          <Permessi />
+        )}
       </div>
     </div>
   );
