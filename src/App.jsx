@@ -1,35 +1,110 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// =================================================
+// File: App.jsx
+// Componente principale dell'applicazione
+// @author: Full Stack Senior Developer
+// @version: 1.0.0 2026-01-14
+// =================================================
 
-function App() {
-  const [count, setCount] = useState(0)
+import { useState } from 'react';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import Login from '../components/Login/Login';
+import Registration from '../components/Registration/Registration';
+import './App.css';
+
+/**
+ * Componente per la dashboard (schermata dopo il login)
+ */
+const Dashboard = () => {
+  const { user, logout } = useAuth();
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="dashboard">
+      <div className="dashboard-header">
+        <h1>Benvenuto, {user?.nome} {user?.cognome}!</h1>
+        <button onClick={logout} className="btn-logout">
+          Logout
         </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <div className="dashboard-content">
+        <div className="user-info-card">
+          <h2>Informazioni Utente</h2>
+          <div className="info-row">
+            <span className="info-label">Nome:</span>
+            <span className="info-value">{user?.nome}</span>
+          </div>
+          <div className="info-row">
+            <span className="info-label">Cognome:</span>
+            <span className="info-value">{user?.cognome}</span>
+          </div>
+          <div className="info-row">
+            <span className="info-label">Email:</span>
+            <span className="info-value">{user?.email}</span>
+          </div>
+          <div className="info-row">
+            <span className="info-label">Ruolo:</span>
+            <span className={`badge badge-${user?.ruolo?.toLowerCase()}`}>
+              {user?.ruolo}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/**
+ * Componente principale con routing
+ */
+const AppContent = () => {
+  const { isAuthenticated, loading } = useAuth();
+  const [currentView, setCurrentView] = useState('login'); // 'login' o 'register'
+
+  // Mostra uno spinner durante il caricamento iniziale
+  if (loading) {
+    return (
+      <div className="loading-container">
+        <div className="spinner-large"></div>
+        <p>Caricamento...</p>
+      </div>
+    );
+  }
+
+  // Se l'utente è autenticato, mostra la dashboard
+  if (isAuthenticated()) {
+    return <Dashboard />;
+  }
+
+  // Altrimenti mostra login o registrazione
+  return (
+    <>
+      {currentView === 'login' ? (
+        <Login
+          onSwitchToRegister={() => setCurrentView('register')}
+          onLoginSuccess={(user) => {
+            console.log('Login completato per:', user);
+          }}
+        />
+      ) : (
+        <Registration
+          onSwitchToLogin={() => setCurrentView('login')}
+          onRegistrationSuccess={(user) => {
+            console.log('Registrazione completata per:', user);
+          }}
+        />
+      )}
     </>
-  )
+  );
+};
+
+/**
+ * Componente App principale con Provider
+ */
+function App() {
+  return (
+    <AuthProvider>
+      <AppContent />
+    </AuthProvider>
+  );
 }
 
-export default App
+export default App;
