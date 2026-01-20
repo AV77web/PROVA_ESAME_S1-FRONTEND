@@ -20,9 +20,9 @@
     align-items: center;
     margin-bottom: 1rem;
     padding: 0.75rem 1rem;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #667eea 0%, #4facfe 100%);
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(240, 147, 251, 0.25);
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
     color: white;
 }
 
@@ -198,7 +198,7 @@
 
 .btn-edit {
     padding: 0.4rem 0.8rem;
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: linear-gradient(135deg, #667eea 0%, #4facfe 100%);
     color: white;
     border: none;
     border-radius: 6px;
@@ -213,7 +213,7 @@
 
 .btn-edit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(240, 147, 251, 0.3);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
 }
 
 .btn-delete {
