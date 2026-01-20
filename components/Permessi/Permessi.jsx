@@ -312,7 +312,6 @@ const Permessi = () => {
                     <table className="permessi-table">
                         <thead>
                             <tr>
-                                <th>🆔 ID</th>
                                 {user?.ruolo === 'Responsabile' && <th>👤 Richiedente</th>}
                                 <th>📂 Categoria</th>
                                 <th>📅 Data Inizio</th>
@@ -325,26 +324,25 @@ const Permessi = () => {
                         </thead>
                         <tbody>
                             {permessi.map(permesso => (
-                                <tr key={permesso.RichiestaID}>
-                                    <td>{permesso.RichiestaID}</td>
+                                <tr key={permesso.RichiestaID || permesso.richiestaid}>
                                     {user?.ruolo === 'Responsabile' && (
                                         <td>
-                                            {permesso.RichiedenteNome} {permesso.RichiedenteCognome}
+                                            {(permesso.RichiedenteNome || permesso.richiedentenome)} {(permesso.RichiedenteCognome || permesso.richiedentecognome)}
                                         </td>
                                     )}
-                                    <td>{permesso.CategoriaDescrizione}</td>
-                                    <td>{formatDate(permesso.DataInizio)}</td>
-                                    <td>{formatDate(permesso.DataFine)}</td>
+                                    <td>{permesso.CategoriaDescrizione || permesso.categoriadescrizione || '-'}</td>
+                                    <td>{formatDate(permesso.DataInizio || permesso.datainizio)}</td>
+                                    <td>{formatDate(permesso.DataFine || permesso.datafine)}</td>
                                     <td>
-                                        <span className={`stato-badge ${getStatoBadgeClass(permesso.Stato)}`}>
-                                            {permesso.Stato}
+                                        <span className={`stato-badge ${getStatoBadgeClass(permesso.Stato || permesso.stato)}`}>
+                                            {permesso.Stato || permesso.stato}
                                         </span>
                                     </td>
-                                    <td>{formatDate(permesso.DataRichiesta)}</td>
+                                    <td>{formatDate(permesso.DataRichiesta || permesso.datarichiesta)}</td>
                                     {user?.ruolo === 'Responsabile' && (
                                         <td>
-                                            {permesso.ValutatoreNome ?
-                                                `${permesso.ValutatoreNome} ${permesso.ValutatoreCognome}` :
+                                            {(permesso.ValutatoreNome || permesso.valutatornome) ?
+                                                `${(permesso.ValutatoreNome || permesso.valutatornome)} ${(permesso.ValutatoreCognome || permesso.valutatorcognome)}` :
                                                 '-'
                                             }
                                         </td>
@@ -356,14 +354,14 @@ const Permessi = () => {
                                                 <>
                                                     <button
                                                         className="btn-success"
-                                                        onClick={() => handleApprova(permesso.RichiestaID)}
+                                                        onClick={() => handleApprova(permesso.RichiestaID || permesso.richiestaid)}
                                                         title="Approva richiesta"
                                                     >
                                                         ✓ Approva
                                                     </button>
                                                     <button
                                                         className="btn-danger"
-                                                        onClick={() => handleRifiuta(permesso.RichiestaID)}
+                                                        onClick={() => handleRifiuta(permesso.RichiestaID || permesso.richiestaid)}
                                                         title="Rifiuta richiesta"
                                                     >
                                                         ✗ Rifiuta
@@ -377,7 +375,7 @@ const Permessi = () => {
                                             {user?.ruolo === 'Dipendente' && permesso.Stato === 'In attesa' ? (
                                                 <button
                                                     className="btn-danger"
-                                                    onClick={() => handleDelete(permesso.RichiestaID)}
+                                                    onClick={() => handleDelete(permesso.RichiestaID || permesso.richiestaid)}
                                                     title="Elimina richiesta"
                                                 >
                                                     🗑️ Elimina
