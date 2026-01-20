@@ -138,6 +138,76 @@ export const getCategorie = async () => {
 };
 
 /**
+ * Ottieni una singola categoria di permesso
+ * @param {number} id - ID della categoria
+ * @returns {Promise<Object>} - Dettagli della categoria
+ */
+export const getCategoria = async (id) => {
+    const response = await fetch(`${API_BASE_URL}/categorie/${id}`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Crea una nuova categoria di permesso (solo Responsabile)
+ * @param {Object} categoriaData - Dati della categoria
+ * @param {number} categoriaData.categoriaId - ID della categoria
+ * @param {string} categoriaData.descrizione - Descrizione della categoria
+ * @returns {Promise<Object>} - Categoria creata
+ */
+export const createCategoria = async (categoriaData) => {
+    const response = await fetch(`${API_BASE_URL}/categorie`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(categoriaData),
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Modifica una categoria di permesso esistente (solo Responsabile)
+ * @param {number} id - ID della categoria
+ * @param {Object} categoriaData - Dati aggiornati della categoria
+ * @param {string} categoriaData.descrizione - Nuova descrizione
+ * @returns {Promise<Object>} - Categoria modificata
+ */
+export const updateCategoria = async (id, categoriaData) => {
+    const response = await fetch(`${API_BASE_URL}/categorie/${id}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(categoriaData),
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Elimina una categoria di permesso (solo Responsabile)
+ * @param {number} id - ID della categoria da eliminare
+ * @returns {Promise<Object>} - Messaggio di conferma
+ */
+export const deleteCategoria = async (id) => {
+    const response = await fetch(`${API_BASE_URL}/categorie/${id}`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+    return handleResponse(response);
+};
+
+/**
  * Ottieni tutte le richieste di permesso (con filtri opzionali)
  * @param {Object} filters - Filtri per le richieste
  * @param {number} [filters.utenteId] - ID utente

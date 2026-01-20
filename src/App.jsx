@@ -10,6 +10,7 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 import Login from '../components/Login/Login';
 import Registration from '../components/Registration/Registration';
 import Permessi from '../components/Permessi/Permessi';
+import Categorie from '../components/Categorie/Categorie';
 import './App.css';
 
 /**
@@ -17,7 +18,7 @@ import './App.css';
  */
 const Dashboard = () => {
   const { user, logout } = useAuth();
-  const [currentPage, setCurrentPage] = useState('home'); // 'home' o 'permessi'
+  const [currentPage, setCurrentPage] = useState('home'); // 'home', 'permessi', 'categorie'
 
   return (
     <div className="dashboard">
@@ -39,19 +40,27 @@ const Dashboard = () => {
           className={`nav-item ${currentPage === 'home' ? 'active' : ''}`}
           onClick={() => setCurrentPage('home')}
         >
-          Home
+          🏠 Home
         </button>
         <button
           className={`nav-item ${currentPage === 'permessi' ? 'active' : ''}`}
           onClick={() => setCurrentPage('permessi')}
         >
-          Permessi
+          📋 Permessi
         </button>
+        {user?.ruolo === 'Responsabile' && (
+          <button
+            className={`nav-item ${currentPage === 'categorie' ? 'active' : ''}`}
+            onClick={() => setCurrentPage('categorie')}
+          >
+            🏷️ Categorie
+          </button>
+        )}
       </nav>
 
       {/* Contenuto della pagina */}
       <div className="dashboard-content">
-        {currentPage === 'home' ? (
+        {currentPage === 'home' && (
           <div className="user-info-card">
             <h2>Informazioni Utente</h2>
             <div className="info-row">
@@ -73,20 +82,28 @@ const Dashboard = () => {
               </span>
             </div>
 
-            {/* Quick action */}
+            {/* Quick actions */}
             <div className="quick-actions">
               <h3>Azioni Rapide</h3>
               <button
                 className="btn-action"
                 onClick={() => setCurrentPage('permessi')}
               >
-                Vai a Gestione Permessi →
+                📋 Vai a Gestione Permessi →
               </button>
+              {user?.ruolo === 'Responsabile' && (
+                <button
+                  className="btn-action"
+                  onClick={() => setCurrentPage('categorie')}
+                >
+                  🏷️ Vai a Gestione Categorie →
+                </button>
+              )}
             </div>
           </div>
-        ) : (
-          <Permessi />
         )}
+        {currentPage === 'permessi' && <Permessi />}
+        {currentPage === 'categorie' && <Categorie />}
       </div>
     </div>
   );
