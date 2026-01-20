@@ -11,6 +11,7 @@ import Login from '../components/Login/Login';
 import Registration from '../components/Registration/Registration';
 import Permessi from '../components/Permessi/Permessi';
 import Categorie from '../components/Categorie/Categorie';
+import Statistiche from '../components/Statistiche/Statistiche';
 import './App.css';
 
 /**
@@ -18,7 +19,7 @@ import './App.css';
  */
 const Dashboard = () => {
   const { user, logout } = useAuth();
-  const [currentPage, setCurrentPage] = useState('home'); // 'home', 'permessi', 'categorie'
+  const [currentPage, setCurrentPage] = useState('home'); // 'home', 'permessi', 'categorie', 'statistiche'
 
   return (
     <div className="dashboard">
@@ -49,12 +50,20 @@ const Dashboard = () => {
           📋 Permessi
         </button>
         {user?.ruolo === 'Responsabile' && (
-          <button
-            className={`nav-item ${currentPage === 'categorie' ? 'active' : ''}`}
-            onClick={() => setCurrentPage('categorie')}
-          >
-            🏷️ Categorie
-          </button>
+          <>
+            <button
+              className={`nav-item ${currentPage === 'categorie' ? 'active' : ''}`}
+              onClick={() => setCurrentPage('categorie')}
+            >
+              🏷️ Categorie
+            </button>
+            <button
+              className={`nav-item ${currentPage === 'statistiche' ? 'active' : ''}`}
+              onClick={() => setCurrentPage('statistiche')}
+            >
+              📊 Statistiche
+            </button>
+          </>
         )}
       </nav>
 
@@ -92,18 +101,27 @@ const Dashboard = () => {
                 📋 Vai a Gestione Permessi →
               </button>
               {user?.ruolo === 'Responsabile' && (
-                <button
-                  className="btn-action"
-                  onClick={() => setCurrentPage('categorie')}
-                >
-                  🏷️ Vai a Gestione Categorie →
-                </button>
+                <>
+                  <button
+                    className="btn-action"
+                    onClick={() => setCurrentPage('categorie')}
+                  >
+                    🏷️ Vai a Gestione Categorie →
+                  </button>
+                  <button
+                    className="btn-action"
+                    onClick={() => setCurrentPage('statistiche')}
+                  >
+                    📊 Vai a Statistiche →
+                  </button>
+                </>
               )}
             </div>
           </div>
         )}
         {currentPage === 'permessi' && <Permessi />}
         {currentPage === 'categorie' && <Categorie />}
+        {currentPage === 'statistiche' && <Statistiche />}
       </div>
     </div>
   );

@@ -314,13 +314,92 @@ export const valutaPermesso = async (id, stato, utenteValutazioneId) => {
 };
 
 /**
- * Elimina una richiesta di permesso (solo se in attesa)
+ * Elimina una richiesta di permesso
+ * Dipendenti: solo se propria e in attesa
+ * Responsabili: possono eliminare anche richieste approvate
  * @param {number} id - ID della richiesta
  * @returns {Promise<Object>} - Messaggio di conferma
  */
 export const deletePermesso = async (id) => {
     const response = await fetch(`${API_BASE_URL}/permessi/${id}`, {
         method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Ottieni elenco richieste da approvare (solo per Responsabili)
+ * @returns {Promise<Object>} - Lista delle richieste in attesa
+ */
+export const getRichiesteDaApprovare = async () => {
+    const response = await fetch(`${API_BASE_URL}/permessi/da-approvare`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Approva una richiesta di permesso (solo Responsabili)
+ * @param {number} id - ID della richiesta
+ * @returns {Promise<Object>} - Richiesta approvata
+ */
+export const approvaRichiesta = async (id) => {
+    const response = await fetch(`${API_BASE_URL}/permessi/${id}/approva`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Rifiuta una richiesta di permesso (solo Responsabili)
+ * @param {number} id - ID della richiesta
+ * @returns {Promise<Object>} - Richiesta rifiutata
+ */
+export const rifiutaRichiesta = async (id) => {
+    const response = await fetch(`${API_BASE_URL}/permessi/${id}/rifiuta`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+    });
+    return handleResponse(response);
+};
+
+/**
+ * Ottieni statistiche aggregate delle richieste approvate (solo Responsabili)
+ * Requisito Avanzato: Visualizzazione aggregata con numero totale di giorni
+ * @param {Object} filters - Filtri opzionali
+ * @param {number} [filters.utenteId] - ID utente/dipendente
+ * @param {number} [filters.mese] - Mese (1-12)
+ * @param {number} [filters.anno] - Anno (es: 2024)
+ * @returns {Promise<Object>} - Statistiche aggregate per dipendente
+ */
+export const getStatistiche = async (filters = {}) => {
+    const params = new URLSearchParams();
+    if (filters.utenteId) params.append('utenteId', filters.utenteId);
+    if (filters.mese) params.append('mese', filters.mese);
+    if (filters.anno) params.append('anno', filters.anno);
+
+    const queryString = params.toString();
+    const url = queryString
+        ? `${API_BASE_URL}/permessi/statistiche?${queryString}`
+        : `${API_BASE_URL}/permessi/statistiche`;
+
+    const response = await fetch(url, {
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
         },

@@ -11,7 +11,8 @@ import {
     getPermessi,
     getCategorie,
     createPermesso,
-    valutaPermesso,
+    approvaRichiesta,
+    rifiutaRichiesta,
     deletePermesso
 } from '../../src/services/api';
 import './Permessi.css';
@@ -96,16 +97,29 @@ const Permessi = () => {
         }
     };
 
-    const handleValuta = async (richiestaId, stato) => {
-        if (!window.confirm(`Confermi di voler ${stato.toLowerCase()} questa richiesta?`)) {
+    const handleApprova = async (richiestaId) => {
+        if (!window.confirm('Confermi di voler approvare questa richiesta?')) {
             return;
         }
 
         try {
-            await valutaPermesso(richiestaId, stato, user.id);
+            await approvaRichiesta(richiestaId);
             loadData();
         } catch (err) {
-            alert('Errore nella valutazione: ' + err.message);
+            alert('Errore nell\'approvazione: ' + err.message);
+        }
+    };
+
+    const handleRifiuta = async (richiestaId) => {
+        if (!window.confirm('Confermi di voler rifiutare questa richiesta?')) {
+            return;
+        }
+
+        try {
+            await rifiutaRichiesta(richiestaId);
+            loadData();
+        } catch (err) {
+            alert('Errore nel rifiuto: ' + err.message);
         }
     };
 
@@ -342,14 +356,14 @@ const Permessi = () => {
                                                 <>
                                                     <button
                                                         className="btn-success"
-                                                        onClick={() => handleValuta(permesso.RichiestaID, 'Approvato')}
+                                                        onClick={() => handleApprova(permesso.RichiestaID)}
                                                         title="Approva richiesta"
                                                     >
                                                         ✓ Approva
                                                     </button>
                                                     <button
                                                         className="btn-danger"
-                                                        onClick={() => handleValuta(permesso.RichiestaID, 'Rifiutato')}
+                                                        onClick={() => handleRifiuta(permesso.RichiestaID)}
                                                         title="Rifiuta richiesta"
                                                     >
                                                         ✗ Rifiuta
